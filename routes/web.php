@@ -1,0 +1,27 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get("/", "AlbumsController@index")->name("albums");
+
+Route::get("/albums", "AlbumsController@index")->name("albums");
+
+Route::delete("/albums/{id}", "AlbumsController@delete");
+
+Route::get("/albums/create", "AlbumsController@create")->name("album.create");
+
+Route::post("/albums/save", "AlbumsController@save")->name("album.save");
+
+Route::get("/albums/{id}", "AlbumsController@edit");
+
+Route::patch("/albums/{id}", "AlbumsController@store");
+
