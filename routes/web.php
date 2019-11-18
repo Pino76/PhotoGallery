@@ -19,7 +19,7 @@ Route::delete("/albums/{id}", "AlbumsController@delete");
 
 Route::get("/albums/create", "AlbumsController@create")->name("album.create");
 
-Route::post("/albums/save", "AlbumsController@save")->name("album.save");
+Route::post("/albums", "AlbumsController@save")->name("albums.save");
 
 Route::get("/albums/{id}", "AlbumsController@edit");
 
