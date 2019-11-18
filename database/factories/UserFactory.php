@@ -18,6 +18,8 @@ use Illuminate\Support\Str;
 |
 */
 
+$img = ["abstract" , "city" , "people" , "transport" , "food" , "nature" , "business" , "nightlife" , "sports"];
+
 $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
@@ -28,19 +30,20 @@ $factory->define(User::class, function (Faker $faker) {
     ];
 });
 
-$factory->define(Album::class, function (Faker $faker) {
+$factory->define(Album::class, function (Faker $faker) use ($img) {
     return [
         'album_name' => $faker->name,
+        'album_thumb' => $faker->imageUrl($width=640, $height=480, $faker->randomElement($img)),
         'description' => $faker->text(128),
         'user_id' => User::inRandomOrder()->first()->id
     ];
 });
 
-$factory->define(Photo::class, function (Faker $faker) {
+$factory->define(Photo::class, function (Faker $faker) use ($img) {
     return [
         'album_id' => Album::inRandomOrder()->first()->id,
         'name' => $faker->text(64),
         'description' => $faker->text(128),
-        'img_path' => $faker->imageUrl($width=640, $height=480, "city")
+        'img_path' => $faker->imageUrl($width=640, $height=480, $faker->randomElement($img))
     ];
 });

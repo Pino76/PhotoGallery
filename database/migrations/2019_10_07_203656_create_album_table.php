@@ -16,6 +16,7 @@ class CreateAlbumTable extends Migration
         Schema::create('albums', function (Blueprint $table) {
             $table->increments('id');
             $table->string('album_name', 128);
+            $table->string('album_thumb', 128);
             $table->text('description');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->on('users')->references('id')->onDelete('cascade')->onUpdate('cascade');
@@ -29,8 +30,7 @@ class CreateAlbumTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down(){
         Schema::dropIfExists('albums');
     }
 }
