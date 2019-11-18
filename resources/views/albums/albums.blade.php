@@ -13,7 +13,11 @@
             @forelse($albums AS $album)
                 <li class="list-group-item">
                     {{$album->id}} - {{$album->album_name}}
-                    <div class="float-right">
+
+                    <div class="float-right" style="border: 1px solid #F00">
+                        @if($album->album_thumb)
+                            <img src="{{$album->Path}}" alt="{{$album->album_name}}" title="{{$album->album_name}}" width="100" height="100">
+                        @endif
                         <a href="/albums/{{$album->id}}" class="btn btn-primary" id="update">Update</a>
                         <a href="/albums/{{$album->id}}" class="btn btn-danger" id="delete">Delete</a>
                     </div>
