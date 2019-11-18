@@ -29,25 +29,31 @@ class AlbumsController extends Controller {
     }
 
     public function create(){
-        return view("albums.createalbum");
+        $album = new Album();
+        return view("albums.createalbum", ["album"=> $album]);
     }
 
     public function save(){
         $album = new Album();
         $album->album_name = request()->input("name");
+        $album->album_thumb = '';
         $album->description = request()->input("description");
         $album->user_id = 1;
-
         $res = $album->save();
 
-        $message = $res ? "Album ". $album->album_name ." è stato salvato" : "Operazione di salvataggio fallita";
-        session()->flash("message",$message);
-        return redirect()->route("albums");
+        if($res){
+            $this->processFile($album->id, request() ,  $album);
+            $album->save();
+        }
+
+        $name = request()->input("name");
+        $message = $res ? "Album " . $name . " creato" : "Album ". $name . " non è stato creato";
+        session()->flash('message' , $message);
+        return redirect()->route('albums');
     }
 
     public function edit($id){
         $album = Album::find($id);
-
         return view("albums.edit" , ["album" => $album]);
     }
 
@@ -55,13 +61,32 @@ class AlbumsController extends Controller {
         $album = Album::find($id);
         $album->album_name = $request->input("name");
         $album->description = $request->input("description");
-        $res = $album->save();
 
+        $this->processFile($id, $request, $album);
+
+        $res = $album->save();
         $message = $res ? "Album ". $album->album_name ." è stato modificato" : "Operazione di modifica fallita";
 
         session()->flash("message" , $message);
         return redirect()->route("albums");
     }
+
+
+    public function processFile($id, $request, $album){
+        if(!$request->hasFile("album_thumb")){
+            return false;
+        }
+
+        $file = $request->file("album_thumb");
+
+        if($file->isValid()){
+            $fileName = $id . "." . $file->extension();
+            $album->album_thumb = $file->storeAs(env("ALBUM_THUMB_DIR"), $fileName);
+        }else{
+            return false;
+        }
+    }
+
 
 
 }
