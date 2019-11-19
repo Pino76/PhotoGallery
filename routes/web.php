@@ -15,7 +15,7 @@ Route::get("/", "AlbumsController@index")->name("albums");
 
 Route::get("/albums", "AlbumsController@index")->name("albums");
 
-Route::delete("/albums/{id}", "AlbumsController@delete");
+Route::delete("/albums/{album}", "AlbumsController@delete")->where("album","[0-9]+");
 
 Route::get("/albums/create", "AlbumsController@create")->name("album.create");
 
