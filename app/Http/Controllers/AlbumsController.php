@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Album;
 use Illuminate\Http\Request;
 use DB;
+use Storage;
 
 class AlbumsController extends Controller {
 
@@ -28,14 +29,16 @@ class AlbumsController extends Controller {
         $disk = config("filesystems.default");
 
         $res = $album->delete();
+
         if($res){
-            if($thumbnail && Storage::disk($disk)->has($thumbnail)){
+           if($thumbnail && Storage::disk($disk)->has($thumbnail)){
                 Storage::disk($disk)->delete($thumbnail);
             }
         }
 
         return (string)$res;
     }
+
 
     public function create(){
         $album = new Album();
