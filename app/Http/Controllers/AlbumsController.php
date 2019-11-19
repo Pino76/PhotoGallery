@@ -23,9 +23,18 @@ class AlbumsController extends Controller {
         return view("albums.albums", ["albums" => $albums] );
     }
 
-    public function delete($id){
-        $album = Album::find($id)->delete();
-        return (string)$album;
+    public function delete(Album $album){
+        $thumbnail = $album->album_thumb;
+        $disk = config("filesystems.default");
+
+        $res = $album->delete();
+        if($res){
+            if($thumbnail && Storage::disk($disk)->has($thumbnail)){
+                Storage::disk($disk)->delete($thumbnail);
+            }
+        }
+
+        return (string)$res;
     }
 
     public function create(){
