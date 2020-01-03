@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Album;
+use App\Models\Photo;
 use Illuminate\Http\Request;
 use DB;
 use Storage;
@@ -10,7 +11,7 @@ use Storage;
 class AlbumsController extends Controller {
 
     public function index(Request $request){
-        $sql = Album::orderByDesc("id");
+        $sql = Album::orderByDesc("id")->withCount('photos');
 
         if($request->has("id")){
             $sql->where("id", $request->input("id"));
@@ -19,7 +20,7 @@ class AlbumsController extends Controller {
         if($request->has("album_name")){
             $sql->where("album_name" , "LIKE" , "%".$request->input("album_name")."%" );
         }
-        $albums = $sql->get();
+        $albums = $sql->paginate(env('IMG_PER_PAGE'));
 
         return view("albums.albums", ["albums" => $albums] );
     }
@@ -99,6 +100,9 @@ class AlbumsController extends Controller {
         }
     }
 
-
+    public function getImages(Album $album){
+        $images = Photo::where("album_id", $album->id)->orderByDesc("updated_at")->paginate(env('IMG_PER_PAGE'));;
+        return view('images.albumimages' , ["images"=>$images, "album"=>$album]);
+    }
 
 }

@@ -12,6 +12,6 @@ class SeedPhotoTable extends Seeder
     public function run(){
         //DB::statement("SET FOREIGN_KEY_CHECKS=0;"); // disabilitare momentaneamente la FK e svuotare la tabella
        // Photo::truncate();
-        factory(Photo::class, 200)->create();
+        factory(Photo::class, 5000)->create();
     }
 }

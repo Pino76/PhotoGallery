@@ -25,3 +25,7 @@ Route::get("/albums/{id}", "AlbumsController@edit");
 
 Route::patch("/albums/{id}", "AlbumsController@store");
 
+Route::get('/albums/{album}/images', 'AlbumsController@getImages')->name("album.getImages")->where("album", "[0-9]+");
+
+Route::resource("/photos","PhotosController");
+
