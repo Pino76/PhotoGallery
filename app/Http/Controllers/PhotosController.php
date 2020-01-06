@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PhotosRequest;
+use App\Http\Requests\PhotosUpdateRequest;
 use App\Models\Album;
 use App\Models\Photo;
 use Illuminate\Http\Request;
@@ -27,7 +29,7 @@ class PhotosController extends Controller{
     }
 
 
-    public function store(Request $request){
+    public function store(PhotosRequest $request){
         $photo = new Photo();
         $photo->name = $request->input('name');
         $photo->description = $request->input('description');
@@ -50,7 +52,7 @@ class PhotosController extends Controller{
     }
 
 
-    public function update(Request $request, Photo $photo){
+    public function update(PhotosUpdateRequest $request, Photo $photo){
         $photo->album_id = $request->input('album_id');
         $photo->name = $request->input('name');
         $photo->description = $request->input('description');

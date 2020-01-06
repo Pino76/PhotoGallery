@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AlbumsRequest;
+use App\Http\Requests\AlbumsUpdateRequest;
 use App\Models\Album;
 use App\Models\Photo;
 use Illuminate\Http\Request;
@@ -46,20 +48,20 @@ class AlbumsController extends Controller {
         return view("albums.createalbum", ["album"=> $album]);
     }
 
-    public function save(){
+    public function save(AlbumsRequest $request){
         $album = new Album();
-        $album->album_name = request()->input("name");
+        $album->album_name = $request->input("name");
         $album->album_thumb = '';
-        $album->description = request()->input("description");
+        $album->description = $request->input("description");
         $album->user_id = 1;
         $res = $album->save();
 
         if($res){
-            $this->processFile($album->id, request() ,  $album);
+            $this->processFile($album->id, $request ,  $album);
             $album->save();
         }
 
-        $name = request()->input("name");
+        $name = $request->input("name");
         $message = $res ? "Album " . $name . " creato" : "Album ". $name . " non è stato creato";
         session()->flash('message' , $message);
         return redirect()->route('albums');
@@ -70,7 +72,7 @@ class AlbumsController extends Controller {
         return view("albums.edit" , ["album" => $album]);
     }
 
-    public function store(Request $request, $id){
+    public function store(AlbumsUpdateRequest $request, $id){
         $album = Album::find($id);
         $album->album_name = $request->input("name");
         $album->description = $request->input("description");
