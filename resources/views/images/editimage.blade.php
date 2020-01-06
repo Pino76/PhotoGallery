@@ -10,9 +10,10 @@
         <h1>Nuova Immagine</h1>
         <form action="{{route('photos.store')}}" method="POST" enctype="multipart/form-data">
     @endif
+        @include('partials.inputerrors')
         <div class="form-group">
             <label for="nome">Name</label>
-            <input type="text" name="name" id="name" value="{{$photo->name}}" class="form-control" placeholder="Image Name">
+            <input type="text" name="name" id="name" value="{{old('name', $photo->name)}}" class="form-control" placeholder="Image Name">
         </div>
         <div class="form-group">
             <select name="album_id" id="album_id">
@@ -30,7 +31,7 @@
         <div class="form-group">
             <label for="nome">Description</label>
             <textarea name="description" id="description" class="form-control" placeholder="Description">
-                  {{$photo->description}}
+                  {{old('description' , $photo->description)}}
             </textarea>
         </div>
 
