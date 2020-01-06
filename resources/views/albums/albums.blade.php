@@ -9,6 +9,7 @@
     @endif
     <form>
         <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}">
+
         <ul class="list-group">
             @forelse($albums AS $album)
                 <li class="list-group-item">
@@ -18,7 +19,9 @@
                         @if($album->album_thumb)
                             <img src="{{$album->Path}}" alt="{{$album->album_name}}" title="{{$album->album_name}}" width="100" height="100">
                         @endif
+                        @if($album->photos_count > 0)
                         <a href="/albums/{{$album->id}}/images" class="btn btn-secondary" id="showImg">Show IMG( {{$album->photos_count}} )</a>
+                        @endif
                         <a href="/photos/create?album_id={{$album->id}}" class="btn btn-outline-primary" id="newImg">New Image</a>
                         <a href="/albums/{{$album->id}}" class="btn btn-info" id="update">Update</a>
                         <a href="/albums/{{$album->id}}" class="btn btn-danger" id="delete">Delete</a>
