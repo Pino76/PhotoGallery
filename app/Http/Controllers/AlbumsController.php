@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Http\Requests\AlbumsRequest;
 use App\Http\Requests\AlbumsUpdateRequest;
 use App\Models\Album;
@@ -18,6 +19,8 @@ class AlbumsController extends Controller {
         if($request->has("id")){
             $sql->where("id", $request->input("id"));
         }
+
+        $sql->where('user_id', Auth::user()->id);
 
         if($request->has("album_name")){
             $sql->where("album_name" , "LIKE" , "%".$request->input("album_name")."%" );
@@ -53,7 +56,8 @@ class AlbumsController extends Controller {
         $album->album_name = $request->input("name");
         $album->album_thumb = '';
         $album->description = $request->input("description");
-        $album->user_id = 1;
+        $album->user_id = $request->user()->id;
+
         $res = $album->save();
 
         if($res){
@@ -76,6 +80,7 @@ class AlbumsController extends Controller {
         $album = Album::find($id);
         $album->album_name = $request->input("name");
         $album->description = $request->input("description");
+        $album->user_id = $request->user()->id;
 
         $this->processFile($id, $request, $album);
 
