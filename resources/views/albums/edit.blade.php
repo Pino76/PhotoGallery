@@ -3,7 +3,7 @@
 @section('content')
     <h1>Modifica Album</h1>
     @include('partials.inputerrors')
-    <form method="POST" action="/albums/{{$album->id}}" enctype="multipart/form-data">
+    <form method="POST" action="{{route('album.patch' , $album->id)}}" enctype="multipart/form-data">
         {{csrf_field()}}
        <input type="hidden" name="_method" value="PATCH">
         <div class="form-group">
@@ -20,6 +20,7 @@
             </textarea>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
+        <a href="{{route('albums')}}" class="btn btn-secondary">Back</a>
     </form>
 
 @endsection

@@ -1,64 +1,97 @@
 @extends('templates.layout')
 
 @section('content')
-    <h1>Album List</h1>
-    @if(session()->has("message"))
+    <h1>Albums</h1>
+    @if(session()->has('message'))
         @component('components.alert-info')
             {{session()->get("message")}}
         @endcomponent
     @endif
-    <form>
-        <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}">
 
-        <ul class="list-group">
-            @forelse($albums AS $album)
-                <li class="list-group-item">
-                    {{$album->id}} - {{$album->album_name}}
 
-                    <div class="float-right" style="border: 1px solid #F00">
-                        @if($album->album_thumb)
-                            <img src="{{$album->Path}}" alt="{{$album->album_name}}" title="{{$album->album_name}}" width="100" height="100">
-                        @endif
-                        @if($album->photos_count > 0)
-                        <a href="/albums/{{$album->id}}/images" class="btn btn-secondary" id="showImg">Show IMG( {{$album->photos_count}} )</a>
-                        @endif
-                        <a href="/photos/create?album_id={{$album->id}}" class="btn btn-outline-primary" id="newImg">New Image</a>
-                        <a href="/albums/{{$album->id}}" class="btn btn-info" id="update">Update</a>
-                        <a href="/albums/{{$album->id}}" class="btn btn-danger" id="delete">Delete</a>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Album name</th>
+            <th>Thumb</th>
+            <th>Creator</th>
+            <th>Created Date</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+
+
+        @foreach($albums AS $album)
+            <tr id="tr{{$album->id}}">
+                <td> {{$album->id}} ) - {{$album->album_name}} [ {{$album->photos_count}} - pictures ]</td>
+
+                <td>
+                    @if($album->album_thumb)
+                        <img src="{{asset($album->path)}}" alt="{{$album->album_name}}" title="{{$album->album_name}}" width="100" >
+                    @endif
+                </td>
+                <td>{{$album->user->name}}</td>
+                <td>{{$album->created_at->format('d/m/Y')}}</td>
+                <td>
+                    <div class="row">
+                        <div class="col-3">
+                            <a href="{{route('photos.create')}}?album_id={{$album->id}}" class="btn btn-success" title="add picture"><span class="fa fa-plus-square-o"></span></a>
+                        </div>
+                        <div class="col-3">
+                            @if($album->photos_count)
+                                <a href="{{route('album.getImages',$album->id)}}" id="showImg" class="btn btn-primary" title="show images"><span class="fa fa-search"></span></a>
+                            @else
+                                <span class="fa fa-search"></span>
+                            @endif
+                        </div>
+                        <div class="col-3">
+                            <a href="{{route('album.edit' , $album->id)}}" id="edit" class="btn btn-info" title="edit"> <span class="fa fa-pencil"></span></a>
+                        </div>
+                        <div class="col-3">
+                            <form id="form{{$album->id}}" method="post" action="{{route('album.delete' , $album->id)}}">
+                                @csrf
+                                @method('DELETE')
+                                <button id="{{$album->id}}" class="btn btn-danger" title="delete">
+                                    <span class="fa fa-minus"></span>
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                </li>
-            @empty
-                <h1>NON CI SONO ALBUM PRESENTI IN QUESTO CATALOGO</h1>
-            @endforelse
-                <li class="list-group-item">
-                    <div style="margin: 0 auto; min-width: 50px; border:1px solid #F00">
-                        {{$albums->links('vendor.pagination.bootstrap-4')}}
-                    </div>
-                </li>
-        </ul>
-    </form>
+                </td>
+            </tr>
+        @endforeach
+        <tr>
+            <td class="" colspan="5">
+                <div >
+                    <div style="margin: 0 auto; width: 10%;">{{$albums->links('vendor.pagination.bootstrap-4')}}</div>
+                </div>
+            </td>
+        </tr>
+    </table>
 @endsection
-
 
 @section('footer')
     @parent
     <script>
-        $(function(){
-            $(".alert-info").fadeOut(5000);
-            $("ul").on("click", "a#delete", function(evt){
+        $(function () {
+            $("div.alert").fadeOut(6000);
+            $('table').on('click', 'button.btn-danger', function (evt) {
                 evt.preventDefault();
-                var urlAlbum = $(this).attr('href');
-                var li = evt.target.parentNode.parentNode;
+                var id = evt.currentTarget.id;
+                var form = $("#form" + id);
+                var urlAlbum = form.attr('action');
+                var tr = $("#tr" + id);
                 $.ajax(
                     urlAlbum,
                     {
                         data:{
-                            _token: $("#_token").val()
+                            _token: '{{csrf_token()}}'
                         },
                         method: 'DELETE',
                         complete: function(resp){
                             if(resp.responseText == 1){
-                                li.remove();
+                                tr.remove();
                             }
                         }
                     })
@@ -66,5 +99,3 @@
         });
     </script>
 @endsection
-
-
