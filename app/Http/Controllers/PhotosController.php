@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+use Gate;
 use App\Http\Requests\PhotosRequest;
 use App\Http\Requests\PhotosUpdateRequest;
 use App\Models\Album;
@@ -53,7 +55,7 @@ class PhotosController extends Controller{
 
 
     public function update(PhotosUpdateRequest $request, Photo $photo){
-        $photo->album_id = $request->input('album_id');
+        $photo->album_id = $request->album_id;
         $photo->name = $request->input('name');
         $photo->description = $request->input('description');
         $this->processFile($photo);
@@ -72,7 +74,7 @@ class PhotosController extends Controller{
         return (string)$res;
     }
 
-    public function processFile(Photo &$photo, Request $request = null){
+    public function processFile(Photo $photo, Request $request = null){
         if(!$request){
             $request = request();
         }
@@ -101,11 +103,12 @@ class PhotosController extends Controller{
         if($photo->img_path && Storage::disk($disk)->has($photo->img_path)){
             return Storage::disk($disk)->delete($photo->img_path);
         }
+        return false;
     }
 
 
     public function getAlbums(){
-        return Album::orderBy('album_name')->get();
+        return Album::orderBy('album_name')->where('user_id', Auth::user()->id)->get();
     }
 
 }

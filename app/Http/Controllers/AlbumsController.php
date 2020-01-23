@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Gate;
 use Auth;
 use App\Http\Requests\AlbumsRequest;
 use App\Http\Requests\AlbumsUpdateRequest;
 use App\Models\Album;
 use App\Models\Photo;
 use Illuminate\Http\Request;
-use DB;
 use Storage;
 
 class AlbumsController extends Controller {
@@ -42,7 +42,12 @@ class AlbumsController extends Controller {
             }
         }
 
-        return (string)$res;
+        if(request()->ajax()){
+            return (string)$res;
+        }else{
+           return redirect()->route('albums');
+        }
+
     }
 
 
@@ -71,13 +76,27 @@ class AlbumsController extends Controller {
         return redirect()->route('albums');
     }
 
+    public function show(Album $album){
+        dd($album);
+    }
+
     public function edit($id){
         $album = Album::find($id);
+
+        if(Gate::denies('manage-album' , $album)){
+            abort(401, 'Non Autorizzato');
+        }
+
         return view("albums.edit" , ["album" => $album]);
     }
 
     public function store(AlbumsUpdateRequest $request, $id){
         $album = Album::find($id);
+
+        if(Gate::denies('manage-album' , $album)){
+            abort(401, 'Non Autorizzato');
+        }
+
         $album->album_name = $request->input("name");
         $album->description = $request->input("description");
         $album->user_id = $request->user()->id;
