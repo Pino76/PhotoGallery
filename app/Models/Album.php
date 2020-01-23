@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Photo;
 class Album extends Model{
@@ -16,7 +17,15 @@ class Album extends Model{
         return $url;
     }
 
+    #un album ha tante foto
     public function photos(){
-        return $this->hasMany(Photo::class, "album_id", "id"); #Un album ha tante foto
+        return $this->hasMany(Photo::class, "album_id", "id");
     }
+
+    #un album appartiene ad un utente
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+
 }

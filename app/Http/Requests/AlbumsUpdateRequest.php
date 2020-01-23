@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Requests;
-
+use App\Models\Album;
 use Illuminate\Foundation\Http\FormRequest;
+use Gate;
 
 class AlbumsUpdateRequest extends FormRequest{
     /**
@@ -10,8 +11,11 @@ class AlbumsUpdateRequest extends FormRequest{
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(){
+        $album = Album::find($this->id);
+        if(Gate::denies('manage-album', $album)){
+            return false;
+        }
         return true;
     }
 
@@ -20,8 +24,7 @@ class AlbumsUpdateRequest extends FormRequest{
      *
      * @return array
      */
-    public function rules()
-    {
+    public function rules(){
         return [
             "name" => "required|unique:albums,album_name",
             "description" => "required",

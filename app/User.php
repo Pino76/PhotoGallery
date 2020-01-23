@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Album;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -36,4 +37,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    #Un utente ha tanti album
+    public function albums(){
+        return $this->hasMany(Album::class);
+    }
+
+    public function  getFullNameAttribute(){
+        return $this->name;
+    }
+
 }
