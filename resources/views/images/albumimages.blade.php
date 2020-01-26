@@ -31,13 +31,13 @@
             </tr>
         @endforelse
         <tr>
-            @if(count($images) > 10)
+
             <td colspan="6">
                 <div style="width: 55%; margin: 0 auto">
                     {{$images->links('vendor.pagination.bootstrap-4')}}
                 </div>
             </td>
-            @endif
+
         </tr>
     </table>
 @endsection
