@@ -70,8 +70,8 @@ class AlbumsController extends Controller {
             $album->save();
         }
 
-        $name = $request->input("name");
-        $message = $res ? "Album " . $name . " creato" : "Album ". $name . " non è stato creato";
+
+        $message = $res ? "Album " .   $album->album_name . " creato" : "Album ".   $album->album_name . " non è stato creato";
         session()->flash('message' , $message);
         return redirect()->route('albums');
     }
