@@ -4,6 +4,7 @@
 use App\User;
 use App\Models\Album;
 use App\Models\Photo;
+use App\Models\AlbumCategory;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -47,3 +48,5 @@ $factory->define(Photo::class, function (Faker $faker) use ($img) {
         'img_path' => $faker->imageUrl($width=640, $height=480, $faker->randomElement($img))
     ];
 });
+
+

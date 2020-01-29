@@ -56,3 +56,7 @@ Auth::routes();
 
 Route::get('/' , 'GalleryController@index');
 
+Route::get('home' , 'GalleryController@index');
+
+
+Route::resource('categories', 'AlbumCategoryController');

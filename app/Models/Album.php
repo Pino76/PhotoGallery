@@ -27,5 +27,9 @@ class Album extends Model{
         return $this->belongsTo(User::class);
     }
 
+    #un album appartiene a tante categorie
+    public function categories(){
+        return $this->belongsToMany(AlbumCategory::class , 'album_category' , 'album_id', 'category_id');
+    }
 
 }
