@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AlbumCategory;
 use Gate;
 use Auth;
 use App\Http\Requests\AlbumsRequest;
@@ -14,7 +15,7 @@ use Storage;
 class AlbumsController extends Controller {
 
     public function index(Request $request){
-        $sql = Album::orderByDesc("id")->withCount('photos');
+        $sql = Album::orderByDesc("id")->withCount('photos')->with('categories');
 
         if($request->has("id")){
             $sql->where("id", $request->input("id"));
@@ -53,7 +54,12 @@ class AlbumsController extends Controller {
 
     public function create(){
         $album = new Album();
-        return view("albums.createalbum", ["album"=> $album]);
+        $categories = AlbumCategory::get();
+        return view("albums.createalbum", [
+            "album"=> $album,
+            "categories" => $categories,
+            "selectedCategories" => []
+        ]);
     }
 
     public function save(AlbumsRequest $request){
@@ -66,6 +72,9 @@ class AlbumsController extends Controller {
         $res = $album->save();
 
         if($res){
+            if($request->has('categories')){
+                $album->categories()->attach($request->categories);
+            }
             $this->processFile($album->id, $request ,  $album);
             $album->save();
         }
@@ -83,11 +92,19 @@ class AlbumsController extends Controller {
     public function edit($id){
         $album = Album::find($id);
 
+        $categories = AlbumCategory::get();
+
+        $selectedCategories = $album->categories->pluck('id')->toArray();
+
         if(Gate::denies('manage-album' , $album)){
             abort(401, 'Non Autorizzato');
         }
 
-        return view("albums.edit" , ["album" => $album]);
+        return view("albums.edit" , [
+            "album" => $album ,
+            "categories" => $categories ,
+            "selectedCategories" => $selectedCategories
+        ]);
     }
 
     public function store(AlbumsUpdateRequest $request, $id){
@@ -104,6 +121,9 @@ class AlbumsController extends Controller {
         $this->processFile($id, $request, $album);
 
         $res = $album->save();
+
+        $album->categories()->sync($request->categories);
+
         $message = $res ? "Album ". $album->album_name ." è stato modificato" : "Operazione di modifica fallita";
 
         session()->flash("message" , $message);

@@ -29,7 +29,8 @@ class Album extends Model{
 
     #un album appartiene a tante categorie
     public function categories(){
-        return $this->belongsToMany(AlbumCategory::class , 'album_category' , 'album_id', 'category_id');
+        return $this->belongsToMany(AlbumCategory::class , 'album_category' , 'album_id', 'category_id')
+            ->withTimestamps();
     }
 
 }

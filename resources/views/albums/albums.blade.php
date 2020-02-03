@@ -16,8 +16,9 @@
             <th>Album name</th>
             <th>Thumb</th>
             <th>Creator</th>
+            <th>Categories</th>
             <th>Created Date</th>
-            <th>&nbsp;</th>
+            <th>&nbsp;&nbsp;</th>
         </tr>
         </thead>
 
@@ -32,6 +33,15 @@
                     @endif
                 </td>
                 <td>{{$album->user->name}}</td>
+                <td>
+                    <ul>
+                    @forelse($album->categories AS $category)
+                            <li>{{$category->category_name}}</li>
+                    @empty
+                        <li>No Category</li>
+                    @endforelse
+                    </ul>
+                </td>
                 <td>{{$album->created_at->format('d/m/Y')}}</td>
                 <td>
                     <div class="row">
@@ -62,7 +72,7 @@
             </tr>
         @endforeach
         <tr>
-            <td class="" colspan="5">
+            <td class="" colspan="6">
                 <div >
                     <div style="margin: 0 auto; width: 10%;">{{$albums->links('vendor.pagination.bootstrap-4')}}</div>
                 </div>
