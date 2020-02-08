@@ -36,6 +36,8 @@ Route::group(
     Route::get('/albums/{album}/images', 'AlbumsController@getImages')->name("album.getImages")->where("album", "[0-9]+");
 
     Route::resource('photos', 'PhotosController');
+
+    Route::resource('categories', 'AlbumCategoryController');
 });
 
 
@@ -60,4 +62,4 @@ Route::get('/' , 'GalleryController@index');
 Route::get('home' , 'GalleryController@index');
 
 
-Route::resource('categories', 'AlbumCategoryController');
+

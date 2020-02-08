@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use App\User;
 
 class AlbumCategory extends Model{
 
@@ -11,6 +13,16 @@ class AlbumCategory extends Model{
     public function albums(){
         return $this->belongsToMany(Album::class , 'album_category' ,  'category_id', 'album_id')
             ->withTimestamps();
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+
+    public function scopeGetCategoriesByUserId(Builder $queryBuilder, User $user){
+        $queryBuilder->where('user_id' , $user->id)->withCount('albums')->latest();
+        return $queryBuilder;
     }
 
 }

@@ -11362,3 +11362,7 @@ main.container{
 }
 
 
+button{
+    cursor: pointer;
+}
+

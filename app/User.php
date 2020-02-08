@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Album;
+use App\Models\AlbumCategory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -45,6 +46,10 @@ class User extends Authenticatable
 
     public function  getFullNameAttribute(){
         return $this->name;
+    }
+
+    public function albumCategories(){
+        return $this->hasMany(AlbumCategory::class);
     }
 
 }
