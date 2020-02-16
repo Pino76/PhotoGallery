@@ -30,8 +30,18 @@ class AlbumCategoryController extends Controller{
         $category = new AlbumCategory();
         $category->category_name = $request->category_name;
         $category->user_id = Auth::id();
-        $category->save();
-        return redirect()->route('categories.index');
+        $res = $category->save();
+
+        if($request->expectsJson()){
+            return [
+                'message' => $res ? 'Category created' : 'Could not create category',
+                'success' => (bool) $res,
+                'data' => $category
+            ];
+        }else{
+            return redirect()->route('categories.index');
+        }
+
     }
 
 
@@ -48,14 +58,31 @@ class AlbumCategoryController extends Controller{
     public function update(Request $request, AlbumCategory $category){
         $category->category_name = $request->category_name;
         $res =  $category->save();
-        return redirect()->route('categories.index');
+        if($request->expectsJson()){
+            return [
+                'message' => $res ? 'Category Update' : 'Could not update category',
+                'success' => (bool) $res,
+                'data' => $category
+            ];
+        }else{
+            return redirect()->route('categories.index');
+        }
     }
 
 
-    public function destroy(AlbumCategory $category){
+    public function destroy(AlbumCategory $category, Request $request){
         $res = $category->delete();
-        return redirect()->route('categories.index');
+        if($request->expectsJson()){
+            return [
+                'message' => $res ? 'Category Deleted' : 'Could not delete category',
+                'success' => (bool) $res
+            ];
+        }else{
+            return redirect()->route('categories.index');
+        }
+
     }
+
 }
 
 
