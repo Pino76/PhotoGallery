@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\User;
+use App\Models\User;
 use App\Models\Photo;
 use App\Models\Album;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;

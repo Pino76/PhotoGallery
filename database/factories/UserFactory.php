@@ -1,7 +1,7 @@
 <?php
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
-use App\User;
+use App\Models\User;
 use App\Models\Album;
 use App\Models\Photo;
 use App\Models\AlbumCategory;

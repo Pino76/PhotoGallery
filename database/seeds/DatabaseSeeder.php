@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\User;
+use App\Models\User;
 use App\Models\Photo;
 use App\Models\Album;
 use App\Models\AlbumCategory;
+use App\Models\AlbumsCategory;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -15,9 +16,10 @@ class DatabaseSeeder extends Seeder
     public function run(){
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
         User::truncate();
-        Photo::truncate();
         Album::truncate();
+        Photo::truncate();
         AlbumCategory::truncate();
+        AlbumsCategory::truncate();
         $this->call(SeedUserTable::class);
         $this->call(SeedAlbumCategoriesTable::class);
         $this->call(SeedAlbumTable::class);

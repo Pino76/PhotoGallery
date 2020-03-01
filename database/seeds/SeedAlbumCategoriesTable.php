@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Models\AlbumCategory;
-
+use App\Models\User;
 class SeedAlbumCategoriesTable extends Seeder{
     /**
      * Run the database seeds.
@@ -15,7 +15,10 @@ class SeedAlbumCategoriesTable extends Seeder{
 
         foreach ($category AS $cat){
             AlbumCategory::create(
-                ['category_name' => $cat]
+                [
+                    'category_name' => $cat,
+                    'user_id' => User::inRandomOrder()->first()->id
+                    ]
             );
         }
     }

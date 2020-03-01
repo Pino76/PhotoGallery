@@ -61,5 +61,14 @@ Route::get('/' , 'GalleryController@index');
 
 Route::get('home' , 'GalleryController@index');
 
+/*
+Route::get('testMail', function (){
+    \Mail::send(new \App\Mail\TestEmail(Auth::user()));
+});*/
+
+Route::get('testMail', function (){
+    \Mail::send(new \App\Mail\TestMd(Auth::user()));
+});
+
 
 
