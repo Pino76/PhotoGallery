@@ -22,6 +22,6 @@ class TestEmail extends Mailable{
         $messaggio = "La email è stata inviata correttamente";
         return $this->view('mails.testemail', ["messaggio" => $messaggio])
             ->with(['username'=>'Pinuccio'])
-            ->to('pinuccio@libero.it')->from("avvAnielloCascione@studiolegalecascione.com");
+            ->to('pinuccio@libero.it')->from("test@studiotest.com");
     }
 }

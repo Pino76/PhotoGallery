@@ -10,6 +10,7 @@ use App\Http\Requests\AlbumsUpdateRequest;
 use App\Models\Album;
 use App\Models\Photo;
 use Illuminate\Http\Request;
+use App\Events\NewAlbumCreated;
 use Storage;
 
 class AlbumsController extends Controller {
@@ -75,8 +76,12 @@ class AlbumsController extends Controller {
             if($request->has('categories')){
                 $album->categories()->attach($request->categories);
             }
+
             $this->processFile($album->id, $request ,  $album);
             $album->save();
+
+
+            event(new NewAlbumCreated($album));
         }
 
 

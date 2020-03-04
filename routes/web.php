@@ -70,5 +70,10 @@ Route::get('testMail', function (){
     \Mail::send(new \App\Mail\TestMd(Auth::user()));
 });
 
+Route::get('testEvent' , function(){
+    $album = \App\Models\Album::first();
+    event(new \App\Events\NewAlbumCreated($album));
+});
+
 
 
