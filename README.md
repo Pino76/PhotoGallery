@@ -14,6 +14,8 @@ Switch to the repo folder
 Install all the dependencies using composer
 
     composer install
+    
+    npm install
 	
 Generate a new application key
 
