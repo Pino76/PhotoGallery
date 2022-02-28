@@ -31,6 +31,8 @@ Run Commands Laravel
     
     php artisan serve
     
+    php artisan storage:link
+    
     browser url http://127.0.0.1:8000/
     
     
