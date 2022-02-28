@@ -11,7 +11,7 @@ Switch to the repo folder
 
     cd PhotoGallery
 	
-Install all the dependencies using composer
+Install all the dependencies using composer and npm
 
     composer install
     
