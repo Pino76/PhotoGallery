@@ -22,4 +22,15 @@ Generate a new application key
     php artisan key:generate
 	
 Open the env file and make the required configuration changes 
-	
+
+Run Commands Laravel
+
+    php artisan migrate
+    
+    php artisan db:seed
+    
+    php artisan serve
+    
+    browser url http://127.0.0.1:8000/
+    
+    
